@@ -1,20 +1,32 @@
-name: Build Telegram X
+name: Build Telegram X - Simplified
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:  # permite rodar manualmente na aba Actions
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30  # evita timeout longo
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Verify submodules cloned
+      - name: Debug - Check cloned folders
         run: |
-          ls -la vkryl/leveldb || echo "ERRO: vkryl/leveldb não existe!"
-          ls -la tdlib || echo "ERRO: tdlib não existe!"
+          echo "Listing vkryl folder:"
+          ls -la vkryl || echo "ERRO: vkryl não existe!"
+          echo "Listing leveldb:"
+          ls -la vkryl/leveldb || echo "ERRO: vkryl/leveldb não clonada!"
+          echo "Listing tdlib:"
+          ls -la tdlib || echo "ERRO: tdlib não clonado!"
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -23,12 +35,22 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      # ... resto igual: setup Android SDK, local.properties, chmod gradlew
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
 
-      - name: Build APK
+      - name: Create local.properties
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Build APK (with debug flags)
         run: ./gradlew assembleRelease --stacktrace --info --warning-mode all
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK (if build succeeds)
+        if: success()
+        uses: actions/upload-artifact@v4
         with:
-          name: app-release
+          name: TelegramX-Release-APK
           path: app/build/outputs/apk/release/*.apk
+          retention-days: 7
