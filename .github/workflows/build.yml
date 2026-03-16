@@ -33,7 +33,10 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          echo "telegram.api_id=${{ secrets.TELEGRAM_API_ID }}" >> local.properties
+          echo "telegram.api_hash=${{ secrets.TELEGRAM_API_HASH }}" >> local.properties
 
       - name: Grant execute permission
         run: chmod +x gradlew
