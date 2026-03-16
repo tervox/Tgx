@@ -15,23 +15,47 @@ jobs:
       - name: Clone submodules
         run: |
           set -e
-          rm -rf vkryl/leveldb vkryl/core vkryl/td vkryl/android tdlib app/jni/third_party/jni-utils app/jni/third_party/webp app/jni/third_party/lz4 app/jni/third_party/ffmpeg app/jni/third_party/flac app/jni/third_party/opus app/jni/third_party/opusfile app/jni/third_party/ogg app/jni/third_party/libvpx app/jni/third_party/rlottie app/jni/tgvoip/third_party/libtgvoip
+          rm -rf vkryl/leveldb vkryl/core vkryl/td vkryl/android tdlib \
+            app/jni/third_party/jni-utils app/jni/third_party/webp app/jni/third_party/lz4 \
+            app/jni/third_party/ffmpeg app/jni/third_party/flac app/jni/third_party/opus \
+            app/jni/third_party/opusfile app/jni/third_party/ogg app/jni/third_party/libvpx \
+            app/jni/third_party/rlottie app/jni/third_party/libyuv \
+            app/jni/tgvoip/third_party/libtgvoip app/jni/tgvoip/third_party/usrsctp \
+            app/jni/tgvoip/third_party/libsrtp app/jni/tgvoip/third_party/openh264 \
+            app/jni/tgvoip/third_party/abseil-cpp app/jni/tgvoip/third_party/webrtc \
+            app/jni/tgvoip/third_party/tgcalls app/jni/tgvoip/third_party/libevent \
+            app/jni/tgvoip/third_party/crc32c app/jni/tgvoip/third_party/rnnoise \
+            thirdparty/androidx-media/legacy thirdparty/androidx-media/latest thirdparty/androidx-media/lollipop
+
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/leveldb vkryl/leveldb
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/X-Core vkryl/core
-          git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/tdlib-utils vkryl/td
-          git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/X-Android vkryl/android
+          git clone --depth=1 --branch main https://github.com/TGX-Android/tdlib-utils vkryl/td
+          git clone --depth=1 --branch main https://github.com/TGX-Android/X-Android vkryl/android
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/tdlib tdlib
           git clone --depth=1 --branch main https://github.com/TGX-Android/jni-utils app/jni/third_party/jni-utils
           git clone --depth=1 --branch 1.4.0 https://github.com/webmproject/libwebp app/jni/third_party/webp
           git clone --depth=1 https://github.com/lz4/lz4 app/jni/third_party/lz4
           git clone --depth=1 --branch release/6.1 https://github.com/FFmpeg/FFmpeg app/jni/third_party/ffmpeg
           git clone --depth=1 https://github.com/xiph/flac app/jni/third_party/flac
-          git clone --depth=1 https://github.com/xiph/opus app/jni/third_party/opus
+          git clone --depth=1 --recurse-submodules https://github.com/xiph/opus app/jni/third_party/opus
           git clone --depth=1 https://github.com/xiph/opusfile app/jni/third_party/opusfile
           git clone --depth=1 https://github.com/xiph/ogg app/jni/third_party/ogg
           git clone --depth=1 https://github.com/webmproject/libvpx app/jni/third_party/libvpx
           git clone --depth=1 --branch main https://github.com/TGX-Android/rlottie app/jni/third_party/rlottie
-          git clone --depth=1 --branch tgx --recurse-submodules https://github.com/TGX-Android/libtgvoip app/jni/tgvoip/third_party/libtgvoip
+          git clone --depth=1 https://chromium.googlesource.com/libyuv/libyuv app/jni/third_party/libyuv
+          git clone --depth=1 --branch tgx https://github.com/TGX-Android/libtgvoip app/jni/tgvoip/third_party/libtgvoip
+          git clone --depth=1 https://github.com/sctplab/usrsctp app/jni/tgvoip/third_party/usrsctp
+          git clone --depth=1 https://github.com/cisco/libsrtp app/jni/tgvoip/third_party/libsrtp
+          git clone --depth=1 --branch v2.4.1 https://github.com/cisco/openh264 app/jni/tgvoip/third_party/openh264
+          git clone --depth=1 https://github.com/abseil/abseil-cpp app/jni/tgvoip/third_party/abseil-cpp
+          git clone --depth=1 --branch main https://github.com/TGX-Android/webrtc app/jni/tgvoip/third_party/webrtc
+          git clone --depth=1 --branch main https://github.com/TGX-Android/tgcalls app/jni/tgvoip/third_party/tgcalls
+          git clone --depth=1 --branch main https://github.com/TGX-Android/libevent app/jni/tgvoip/third_party/libevent
+          git clone --depth=1 --branch main https://github.com/google/crc32c app/jni/tgvoip/third_party/crc32c
+          git clone --depth=1 --branch master https://github.com/xiph/rnnoise app/jni/tgvoip/third_party/rnnoise
+          git clone --depth=1 --branch release https://github.com/androidx/media thirdparty/androidx-media/legacy
+          git clone --depth=1 --branch release https://github.com/androidx/media thirdparty/androidx-media/latest
+          git clone --depth=1 --branch release https://github.com/androidx/media thirdparty/androidx-media/lollipop
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
