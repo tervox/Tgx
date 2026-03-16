@@ -32,6 +32,10 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Install NDK
+        run: |
+          sdkmanager "ndk;23.2.8568313"
+
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
