@@ -1,54 +1,47 @@
-name: Build Telegram X Mod
+name: Build Telegram X
 
 on:
   push:
     branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
-  workflow_dispatch:  # roda manual na aba Actions
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code + submodules
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 1
 
-      - name: Debug folders
+      - name: Init submodules
         run: |
-          echo "Pastas vkryl/leveldb:"
-          ls -la vkryl/leveldb || echo "leveldb faltando - verifique .gitmodules"
-          echo "tdlib:"
-          ls -la tdlib || echo "tdlib faltando"
-          echo "Outras pastas nativas:"
-          ls -la app/jni/third_party || echo "jni/third_party faltando"
+          git submodule init
+          git config submodule.vkryl/leveldb.url https://github.com/TGX-Android/leveldb
+          git config submodule.vkryl/core.url https://github.com/TGX-Android/X-Core
+          git config submodule.vkryl/td.url https://github.com/TGX-Android/tdlib-utils
+          git config submodule.vkryl/android.url https://github.com/TGX-Android/X-Android
+          git config submodule.tdlib.url https://github.com/TGX-Android/tdlib
+          git submodule update --init --depth=1 vkryl/leveldb vkryl/core vkryl/td vkryl/android tdlib
 
-      - name: Setup JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Setup Android SDK
+      - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Make gradlew executable
+      - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease --stacktrace --info --warning-mode none
+      - name: Build APK
+        run: ./gradlew assembleRelease
 
       - name: Upload APK
-        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: TelegramX-Mod-APK
+          name: app-release
           path: app/build/outputs/apk/release/*.apk
