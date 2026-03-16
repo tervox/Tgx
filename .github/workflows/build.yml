@@ -12,16 +12,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Remove empty submodule dirs and clone
+      - name: Clone submodules
         run: |
           set -e
-          rm -rf vkryl/leveldb vkryl/core vkryl/td vkryl/android tdlib app/jni/third_party/jni-utils
+          rm -rf vkryl/leveldb vkryl/core vkryl/td vkryl/android tdlib app/jni/third_party/jni-utils app/jni/third_party/webp app/jni/third_party/lz4 app/jni/third_party/ffmpeg app/jni/third_party/flac app/jni/third_party/opus app/jni/third_party/opusfile app/jni/third_party/ogg app/jni/third_party/libvpx app/jni/third_party/rlottie app/jni/tgvoip/third_party/libtgvoip
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/leveldb vkryl/leveldb
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/X-Core vkryl/core
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/tdlib-utils vkryl/td
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/X-Android vkryl/android
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/tdlib tdlib
-          git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/jni-utils app/jni/third_party/jni-utils
+          git clone --depth=1 --branch main https://github.com/TGX-Android/jni-utils app/jni/third_party/jni-utils
+          git clone --depth=1 --branch 1.4.0 https://github.com/webmproject/libwebp app/jni/third_party/webp
+          git clone --depth=1 https://github.com/lz4/lz4 app/jni/third_party/lz4
+          git clone --depth=1 --branch release/6.1 https://github.com/FFmpeg/FFmpeg app/jni/third_party/ffmpeg
+          git clone --depth=1 https://github.com/xiph/flac app/jni/third_party/flac
+          git clone --depth=1 https://github.com/xiph/opus app/jni/third_party/opus
+          git clone --depth=1 https://github.com/xiph/opusfile app/jni/third_party/opusfile
+          git clone --depth=1 https://github.com/xiph/ogg app/jni/third_party/ogg
+          git clone --depth=1 https://github.com/webmproject/libvpx app/jni/third_party/libvpx
+          git clone --depth=1 --branch main https://github.com/TGX-Android/rlottie app/jni/third_party/rlottie
+          git clone --depth=1 --branch tgx https://github.com/TGX-Android/libtgvoip app/jni/tgvoip/third_party/libtgvoip
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
