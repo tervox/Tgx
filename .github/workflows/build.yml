@@ -20,7 +20,7 @@ jobs:
           git clone --depth=1 --branch main https://github.com/TGX-Android/X-Core vkryl/core
           git clone --depth=1 --branch main https://github.com/TGX-Android/tdlib-utils vkryl/td
           git clone --depth=1 --branch main https://github.com/TGX-Android/X-Android vkryl/android
-          git clone --depth=1 --branch main https://github.com/TGX-Android/tdlib tdlib
+          git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/tdlib tdlib
           git clone --depth=1 --branch main https://github.com/TGX-Android/jni-utils app/jni/third_party/jni-utils
 
       - name: Set up JDK 21
