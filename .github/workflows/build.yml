@@ -25,6 +25,7 @@ jobs:
             app/jni/tgvoip/third_party/abseil-cpp app/jni/tgvoip/third_party/webrtc \
             app/jni/tgvoip/third_party/tgcalls app/jni/tgvoip/third_party/libevent \
             app/jni/tgvoip/third_party/crc32c app/jni/tgvoip/third_party/rnnoise \
+            app/jni/tgvoip/third_party/webrtc_deps/third_party/rnnoise \
             thirdparty/androidx-media/legacy thirdparty/androidx-media/latest thirdparty/androidx-media/lollipop
 
           git clone --depth=1 --branch main --recurse-submodules https://github.com/TGX-Android/leveldb vkryl/leveldb
@@ -42,17 +43,19 @@ jobs:
           git clone --depth=1 https://github.com/xiph/ogg app/jni/third_party/ogg
           git clone --depth=1 https://github.com/webmproject/libvpx app/jni/third_party/libvpx
           git clone --depth=1 --branch main https://github.com/TGX-Android/rlottie app/jni/third_party/rlottie
-          git clone --depth=1 https://chromium.googlesource.com/libyuv/libyuv app/jni/third_party/libyuv
+          git clone https://chromium.googlesource.com/libyuv/libyuv app/jni/third_party/libyuv
           git clone --depth=1 --branch tgx --recurse-submodules https://github.com/TGX-Android/libtgvoip app/jni/tgvoip/third_party/libtgvoip
           git clone --depth=1 https://github.com/sctplab/usrsctp app/jni/tgvoip/third_party/usrsctp
-          git clone --depth=1 https://github.com/cisco/libsrtp app/jni/tgvoip/third_party/libsrtp
+          git clone https://github.com/cisco/libsrtp app/jni/tgvoip/third_party/libsrtp
           git clone --depth=1 --branch v2.4.1 https://github.com/cisco/openh264 app/jni/tgvoip/third_party/openh264
-          git clone --depth=1 https://github.com/abseil/abseil-cpp app/jni/tgvoip/third_party/abseil-cpp
+          git clone https://github.com/abseil/abseil-cpp app/jni/tgvoip/third_party/abseil-cpp
           git clone --depth=1 https://github.com/TGX-Android/webrtc app/jni/tgvoip/third_party/webrtc
-          git clone --depth=1 https://github.com/TGX-Android/tgcalls app/jni/tgvoip/third_party/tgcalls
+          git clone https://github.com/TGX-Android/tgcalls app/jni/tgvoip/third_party/tgcalls
           git clone --depth=1 --branch main https://github.com/TGX-Android/libevent app/jni/tgvoip/third_party/libevent
           git clone --depth=1 --branch main https://github.com/google/crc32c app/jni/tgvoip/third_party/crc32c
           git clone --depth=1 --branch master https://github.com/xiph/rnnoise app/jni/tgvoip/third_party/rnnoise
+          mkdir -p app/jni/tgvoip/third_party/webrtc_deps/third_party
+          git clone --depth=1 --branch master https://github.com/xiph/rnnoise app/jni/tgvoip/third_party/webrtc_deps/third_party/rnnoise
           git clone --depth=1 --branch release https://github.com/androidx/media thirdparty/androidx-media/legacy
           git clone --depth=1 --branch release https://github.com/androidx/media thirdparty/androidx-media/latest
           git clone --depth=1 --branch release https://github.com/androidx/media thirdparty/androidx-media/lollipop
