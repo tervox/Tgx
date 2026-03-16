@@ -49,7 +49,7 @@ jobs:
           git clone --depth=1 --branch v2.4.1 https://github.com/cisco/openh264 app/jni/tgvoip/third_party/openh264
           git clone --depth=1 https://github.com/abseil/abseil-cpp app/jni/tgvoip/third_party/abseil-cpp
           git clone --depth=1 https://github.com/TGX-Android/webrtc app/jni/tgvoip/third_party/webrtc
-          git clone --depth=1 --branch main https://github.com/TGX-Android/tgcalls app/jni/tgvoip/third_party/tgcalls
+          git clone --depth=1 https://github.com/TGX-Android/tgcalls app/jni/tgvoip/third_party/tgcalls
           git clone --depth=1 --branch main https://github.com/TGX-Android/libevent app/jni/tgvoip/third_party/libevent
           git clone --depth=1 --branch main https://github.com/google/crc32c app/jni/tgvoip/third_party/crc32c
           git clone --depth=1 --branch master https://github.com/xiph/rnnoise app/jni/tgvoip/third_party/rnnoise
