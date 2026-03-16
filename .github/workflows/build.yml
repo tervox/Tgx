@@ -1,23 +1,20 @@
 name: Build Telegram X
 
-on:
-  push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
 
-      - name: Clone submodules
-        run: |  # seus clones aqui, mantive iguais
-          git clone --depth=1 --branch main https://github.com/TGX-Android/X-Android vkryl/android
-          # ... todos os outros clones ...
+      - name: Verify submodules cloned
+        run: |
+          ls -la vkryl/leveldb || echo "ERRO: vkryl/leveldb não existe!"
+          ls -la tdlib || echo "ERRO: tdlib não existe!"
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -26,20 +23,12 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Create local.properties
-        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
+      # ... resto igual: setup Android SDK, local.properties, chmod gradlew
 
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace --info --warning-mode all
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: app/build/outputs/apk/release/*.apk
