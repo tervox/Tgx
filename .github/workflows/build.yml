@@ -5,7 +5,7 @@ on:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
-  workflow_dispatch:
+  workflow_dispatch:  # roda manual na aba Actions
 
 jobs:
   build:
@@ -18,29 +18,33 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Check submodules
+      - name: Debug folders
         run: |
-          ls -la vkryl/leveldb && echo "leveldb OK" || echo "leveldb missing - check .gitmodules!"
-          ls -la tdlib && echo "tdlib OK" || echo "tdlib missing!"
+          echo "Pastas vkryl/leveldb:"
+          ls -la vkryl/leveldb || echo "leveldb faltando - verifique .gitmodules"
+          echo "tdlib:"
+          ls -la tdlib || echo "tdlib faltando"
+          echo "Outras pastas nativas:"
+          ls -la app/jni/third_party || echo "jni/third_party faltando"
 
-      - name: Set up JDK 21
+      - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: gradle
 
-      - name: Set up Android SDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Grant gradlew permission
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build APK
-        run: ./gradlew assembleRelease --stacktrace --info --warning-mode none  # none ignora depreciações temporariamente
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace --info --warning-mode none
 
       - name: Upload APK
         if: success()
