@@ -1,34 +1,32 @@
-name: Build Telegram X - Simplified
+name: Build Telegram X - Working Version
 
 on:
   push:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
-  workflow_dispatch:  # permite rodar manualmente na aba Actions
+  workflow_dispatch:  # permite rodar manual na aba Actions
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # evita timeout longo
+    timeout-minutes: 45  # dá tempo pros clones
 
     steps:
-      - name: Checkout with submodules
+      - name: Checkout with all submodules
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Debug - Check cloned folders
+      - name: Quick check if submodules cloned
         run: |
-          echo "Listing vkryl folder:"
-          ls -la vkryl || echo "ERRO: vkryl não existe!"
-          echo "Listing leveldb:"
-          ls -la vkryl/leveldb || echo "ERRO: vkryl/leveldb não clonada!"
-          echo "Listing tdlib:"
-          ls -la tdlib || echo "ERRO: tdlib não clonado!"
+          echo "Verificando pastas críticas:"
+          ls -la vkryl/leveldb && echo "leveldb OK" || echo "ERRO: leveldb faltando"
+          ls -la tdlib && echo "tdlib OK" || echo "ERRO: tdlib faltando"
+          ls -la vkryl/core && echo "core OK" || echo "ERRO: core faltando"
 
-      - name: Set up JDK 21
+      - name: Set up JDK 21 (required for buildSrc)
         uses: actions/setup-java@v4
         with:
           java-version: '21'
@@ -41,16 +39,16 @@ jobs:
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-      - name: Grant execute permission
+      - name: Grant gradlew permission
         run: chmod +x gradlew
 
-      - name: Build APK (with debug flags)
-        run: ./gradlew assembleRelease --stacktrace --info --warning-mode all
+      - name: Build Release APK (ignore warnings temporarily)
+        run: ./gradlew assembleRelease --stacktrace --info --warning-mode none
 
-      - name: Upload APK (if build succeeds)
+      - name: Upload APK if build succeeds
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: TelegramX-Release-APK
+          name: TelegramX-Mod-APK
           path: app/build/outputs/apk/release/*.apk
           retention-days: 7
