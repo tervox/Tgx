@@ -1,32 +1,29 @@
-name: Build Telegram X - Working Version
+name: Build Telegram X Mod
 
 on:
   push:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
-  workflow_dispatch:  # permite rodar manual na aba Actions
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45  # dá tempo pros clones
 
     steps:
-      - name: Checkout with all submodules
+      - name: Checkout code + submodules
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Quick check if submodules cloned
+      - name: Check submodules
         run: |
-          echo "Verificando pastas críticas:"
-          ls -la vkryl/leveldb && echo "leveldb OK" || echo "ERRO: leveldb faltando"
-          ls -la tdlib && echo "tdlib OK" || echo "ERRO: tdlib faltando"
-          ls -la vkryl/core && echo "core OK" || echo "ERRO: core faltando"
+          ls -la vkryl/leveldb && echo "leveldb OK" || echo "leveldb missing - check .gitmodules!"
+          ls -la tdlib && echo "tdlib OK" || echo "tdlib missing!"
 
-      - name: Set up JDK 21 (required for buildSrc)
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
@@ -42,13 +39,12 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x gradlew
 
-      - name: Build Release APK (ignore warnings temporarily)
-        run: ./gradlew assembleRelease --stacktrace --info --warning-mode none
+      - name: Build APK
+        run: ./gradlew assembleRelease --stacktrace --info --warning-mode none  # none ignora depreciações temporariamente
 
-      - name: Upload APK if build succeeds
+      - name: Upload APK
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: TelegramX-Mod-APK
           path: app/build/outputs/apk/release/*.apk
-          retention-days: 7
